@@ -263,7 +263,9 @@
 		return cache;
 	};
 
-}).call(this);/**
+}).call(this);
+
+/**
  * Client-side and Node.js Logger Helper
  * ==========================================================
  *
@@ -502,7 +504,9 @@
 		return cache;
 	};
 
-}).call(this);/**
+}).call(this);
+
+/**
  * Client-side and Node.js Profiler Helper
  * ==========================================================
  *
@@ -520,9 +524,10 @@
 	// Save a reference to the global object (`window` in the browser, `global` on the server)
 	root     = this;
 
+	// store collection of Profiler instances, if any.
 	caches   = {};
 
-	// Create a safe reference to the Utility object for use below.
+	// Create a safe reference to the Profiler object for use below.
 	Profiler = {};
 
 	// Export the object for **Node.js**, with
@@ -791,3 +796,4 @@
 	};
 
 }).call(this, console);
+

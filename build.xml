@@ -1,0 +1,49 @@
+<?xml version="1.0" ?>
+<project name="javie" basedir="." default="build">
+	<target name="build">
+		<phingcall target="delete-archive"></phingcall>
+		<phingcall target="compile-head"></phingcall>
+		<foreach param="dirname" absparam="absname" target="compile-js">
+			<fileset dir="./modules">
+				<type type="dir" />
+				<depth max="0" min="0" />
+			</fileset>
+		</foreach>
+
+		<exec command="uglifyjs -o javie.min.js javie.js" dir="./" checkreturn="true" logoutput="true" />
+	</target>
+
+	<target name="delete-archive">
+		<delete>
+            <fileset dir=".">
+                <include name="javie.js" />
+                <include name="javie.min.js" />
+            </fileset>
+        </delete>
+	</target>
+
+	<target name="compile-head">
+		<echo msg="Compile Header" />
+		<fileset  id="file-to-compile" dir="./javie">
+			<include name="head.js" />
+		</fileset>
+
+		<append destFile="./javie.js">
+			<fileset refid="file-to-compile" />
+		</append>
+	</target>
+
+	<target name="compile-js">
+		<echo msg="In ${dirname}" />
+		<fileset id="file-to-compile" dir="./modules/${dirname}">
+			<include name="${dirname}.js" />
+		</fileset>
+
+		<append destFile="./javie.js">
+			<fileset refid="file-to-compile" />
+		</append>
+	</target>
+
+	
+	
+</project>

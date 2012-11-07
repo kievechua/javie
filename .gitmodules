@@ -1,0 +1,9 @@
+[submodule "profiler"]
+	path = profiler
+	url = git@github.com:javie/profiler.git
+[submodule "logger"]
+	path = logger
+	url = git@github.com:javie/logger.git
+[submodule "events"]
+	path = events
+	url = git@github.com:javie/events.git

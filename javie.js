@@ -20,7 +20,7 @@
 /**
  * Client-side and Node.js Event Listener Helper
  * ==========================================================
- * 
+ *
  * @package     Javie
  * @class       Event
  * @require     underscore
@@ -29,8 +29,8 @@
  * @license     MIT License
  */
 
-(function () { 'use strict'; 
-	
+(function () { 'use strict';
+
 	var root, Events, _, cache;
 
 	// Save a reference to the global object (`window` in the browser, `global` on the server)
@@ -51,7 +51,7 @@
 		exports.Events = Events;
 	}
 	else {
-		// Register Javie namespace if it's not available yet. 
+		// Register Javie namespace if it's not available yet.
 		if ('undefined' === typeof root.Javie) {
 			root.Javie = {};
 		}
@@ -98,16 +98,16 @@
 			 * Add an event listener
 			 *
 			 * <code>
-			 *     ev.listener('javie.ready', function () {
+			 *     ev.listen('javie.ready', function () {
 			 *         console.log('javie.ready');
 			 *     });
 			 * </code>
-			 * 
+			 *
 			 * @param  {String}   id
 			 * @param  {Function} cb
 			 * @return {Object}
 			 */
-			listener: function listener (id, cb) {
+			listen: function listen (id, cb) {
 				if (!_.isFunction(cb)) {
 					throw new Error('Callback is not a function');
 				}
@@ -122,15 +122,33 @@
 			},
 
 			/**
+			 * Add an event listener
+			 *
+			 * <code>
+			 *     ev.listener('javie.ready', function () {
+			 *         console.log('javie.ready');
+			 *     });
+			 * </code>
+			 *
+			 * @deprecated use self::listen()
+			 * @param  {String}   id
+			 * @param  {Function} cb
+			 * @return {Object}
+			 */
+			listener: function listener (id, cb) {
+				return this.listen(id, cb);
+			},
+
+			/**
 			 * Fire all event associated to an event id
 			 *
 			 * <code>
 			 *     ev.fire('javie.ready');
 			 * </code>
-			 * 
-			 * @param  {String} id    
+			 *
+			 * @param  {String} id
 			 * @param  {Array} params
-			 * @return {Array}       
+			 * @return {Array}
 			 */
 			fire: function fire (id, params) {
 				var me, response;
@@ -159,7 +177,7 @@
 			 * <code>
 			 *     ev.first('javie.ready');
 			 * </code>
-			 * 
+			 *
 			 * @param  {[type]} id     [description]
 			 * @param  {[type]} params [description]
 			 * @return {[type]}        [description]
@@ -222,7 +240,7 @@
 				me = this;
 				id = handler.id;
 				cb = handler.cb;
-				
+
 				if (!_.isString(id)) {
 					throw new Error('Event ID is not provided: [' + id + ']');
 				}

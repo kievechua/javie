@@ -9,6 +9,7 @@
 				<depth max="0" min="0" />
 			</fileset>
 		</foreach>
+		<phingcall target="compile-foot"></phingcall>
 
 		<exec command="uglifyjs -o javie.min.js javie.js" dir="./" checkreturn="true" logoutput="true" />
 	</target>
@@ -33,6 +34,17 @@
 		</append>
 	</target>
 
+	<target name="compile-foot">
+		<echo msg="Compile Footer" />
+		<fileset  id="file-to-compile" dir="./javie">
+			<include name="foot.js" />
+		</fileset>
+
+		<append destFile="./javie.js">
+			<fileset refid="file-to-compile" />
+		</append>
+	</target>
+
 	<target name="compile-js">
 		<echo msg="In ${dirname}" />
 		<fileset id="file-to-compile" dir="./modules/${dirname}">
@@ -44,6 +56,6 @@
 		</append>
 	</target>
 
-	
-	
+
+
 </project>

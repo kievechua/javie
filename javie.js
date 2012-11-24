@@ -1,7 +1,7 @@
 /**
  * Javie Package
  * ==========================================================
- * 
+ *
  * @package     Javie
  * @require     underscore, console, jQuery/Zepto
  * @since       0.1.0
@@ -9,7 +9,7 @@
  * @license     MIT License
  */
 
-(function () { 'use strict'; 
+(function () { 'use strict';
 
 	var root = this;
 

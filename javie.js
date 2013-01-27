@@ -4,7 +4,7 @@
  *
  * @package     Javie
  * @require     underscore, console, jQuery/Zepto
- * @since       0.1.0
+ * @since       0.1.1
  * @author      Mior Muhammad Zaki <https://git.io/crynobone>
  * @license     MIT License
  */
@@ -284,7 +284,6 @@
 	};
 
 }).call(this);
-
 /**
  * Client-side and Node.js Logger Helper
  * ==========================================================
@@ -304,7 +303,9 @@
 	root   = this;
 
 	// Create a safe reference to the Logger object for use below.
-	Logger = {};
+	Logger = function () {
+		return this.make();
+	};
 
 	// Export the object for **Node.js**, with
 	// backwards-compatibility for the old `require()` API. If we're in
@@ -548,7 +549,9 @@
 	caches   = {};
 
 	// Create a safe reference to the Profiler object for use below.
-	Profiler = {};
+	Profiler = function (name) {
+		return this.make(name);
+	};
 
 	// Export the object for **Node.js**, with
 	// backwards-compatibility for the old `require()` API. If we're in

@@ -4,7 +4,7 @@
  *
  * @package     Javie
  * @require     underscore, console, jQuery/Zepto
- * @since       0.1.0
+ * @since       0.1.1
  * @author      Mior Muhammad Zaki <https://git.io/crynobone>
  * @license     MIT License
  */

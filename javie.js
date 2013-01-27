@@ -34,11 +34,11 @@
 	var root, Events, _, cache;
 
 	// Save a reference to the global object (`window` in the browser, `global` on the server)
-	root     = this;
+	root = this;
 
 	// Create a safe reference to the Events object for use below.
-	Events  = function () {
-		return this.make();
+	Events = function () {
+		return Events.make();
 	};
 
 	// Export the object for **Node.js**, with
@@ -300,11 +300,11 @@
 	var root, Logger, _, cache;
 
 	// Save a reference to global object (`window` in the browser, `global` on the server)
-	root   = this;
+	root = this;
 
 	// Create a safe reference to the Logger object for use below.
 	Logger = function () {
-		return this.make();
+		return Logger.make();
 	};
 
 	// Export the object for **Node.js**, with
@@ -543,14 +543,14 @@
 	var root, Profiler, _, caches;
 
 	// Save a reference to the global object (`window` in the browser, `global` on the server)
-	root     = this;
+	root = this;
 
 	// store collection of Profiler instances, if any.
-	caches   = {};
+	caches = {};
 
 	// Create a safe reference to the Profiler object for use below.
 	Profiler = function (name) {
-		return this.make(name);
+		return Profiler.make(name);
 	};
 
 	// Export the object for **Node.js**, with

@@ -1,0 +1,7 @@
+* text=auto
+
+# Ignore following folder/file.
+javie/      export-ignore
+modules/    export-ignore
+.gitmodules export-ignore
+build.xml   export-ignore

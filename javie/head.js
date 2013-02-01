@@ -33,7 +33,7 @@
 			env      = null;
 		}
 
-		if (Javie.ENV === env && _.isFunction(callback)) {
+		if ((Javie.ENV === env || _.isNull(env)) && _.isFunction(callback)) {
 			callback.call(Javie);
 		}
 	};

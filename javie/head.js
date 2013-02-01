@@ -1,10 +1,11 @@
 /**
- * Javie Package
- * ==========================================================
+ * ========================================================================
+ * Javie version 1.0.0
+ * ========================================================================
  *
  * @package     Javie
  * @require     underscore, console, jQuery/Zepto
- * @since       0.1.1
+ * @version     1.0.0       
  * @author      Mior Muhammad Zaki <http://git.io/crynobone>
  * @license     MIT License
  */

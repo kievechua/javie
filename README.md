@@ -164,7 +164,7 @@ jQuery('#register-form').bind('submit', function onRegisterFormSubmit (e) {
 Using `Javie.Events`, you can attach as many event as you which to either global or individual name that you identify when you run `Javie.Request('register')` (in this case the name would be `register`).
 
 ```javascript
-var ev = Events.make();
+var ev = new Javie.Events;
 
 ev.listen('Request.beforeSend: register', function beforeSend (self) { 
 	// this will be run before Ajax request is send to server.

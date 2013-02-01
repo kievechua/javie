@@ -146,6 +146,39 @@ logs.info('It a info');
 logs.log('It a log');
 ```
 
+## Request
+
+`Javie.Request` is a quick way to use RESTful request on top of `jQuery.ajax`. You can choice whether to use `GET`, `POST`, `PUT` or `DELETE` and the object will manage everything else.
+
+```javascript
+jQuery('#register-form').bind('submit', function onRegisterFormSubmit (e) {
+	var r;
+	
+	e.preventDefault();
+	
+	r = new Javie.Request('register');
+	r.to('POST /register.php', this).execute();
+});
+```
+
+Using `Javie.Events`, you can attach as many event as you which to either global or individual name that you identify when you run `Javie.Request('register')` (in this case the name would be `register`).
+
+```javascript
+var ev = Events.make();
+
+ev.listen('Request.beforeSend: register', function beforeSend (self) { 
+	// this will be run before Ajax request is send to server.
+});
+
+ev.listen('Request.onError: register', function onValidationError (data, status, self) { 
+	// this will be run if server return json containing { 'errors' : [ ] }
+});
+
+ev.listen('Request.onComplete: register', function (data, status, self) { 
+	// this will be run once the request is completed.
+});
+```
+
 ## Requirement
 
 * jQuery/Zepto

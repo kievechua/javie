@@ -8,15 +8,19 @@ Javie Client-side JavaScript Library is simple toolkit written for Client-side J
 `Javie` simplify the way you define your environment, for instance profiler and logger should only run in "dev" invironment.
 
 ```javascript
+/* Define the environment to `dev` */
 Javie.ENV = "dev";
 
 Javie('dev', function initiateDevEnv () {
+	// do something on just dev environment.
     this.Profiler.enable();
     this.Logger.enable();
 });
 
 Javie('production', function initiateProdEnv () {
     // do something on just production environment.
+    this.Profiler.disable();
+    this.Logger.disable();
 });
 
 Javie(function initiateAllEnv () {

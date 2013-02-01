@@ -10,10 +10,37 @@
  */
 
 (function () { 'use strict';
+	var root, Javie, _;
+	
+	root = this;
 
-	var root = this;
+	// load all dependencies
+	_ = root._;
 
-	root.Javie = {};
+	// Require underscore.js, if we're on the server, and it's not already present.
+	if (!_ && ('undefined' !== typeof require)) {
+		_ = require('underscore');
+	}
+
+	// throw an error if underscore.js still not available
+	if (!_) {
+		throw new Error('Expected Underscore.js not available');
+	}
+
+	Javie = function Javie (env, callback) {
+		if (_.isFunction(env)) {
+			callback = env;
+			env      = null;
+		}
+
+		if (Javie.ENV === env && _.isFunction(callback)) {
+			callback.call(Javie);
+		}
+	};
+
+
+	Javie.ENV  = 'production';
+	root.Javie = Javie;
 
 }).call(this);
 

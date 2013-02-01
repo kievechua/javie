@@ -20,6 +20,8 @@
 			Javie.Profiler.enable();
 			Javie.Logger.enable();
 
+			Javie.ENV = 'local';
+
 			p = new Javie.Profiler;
 			p.time('load.page', 'Load page');
 		}).call(this);
@@ -52,17 +54,18 @@
 		</div> <!-- /container -->
 		<script>
 		jQuery(function pageLoad() {
-			var p, r, ev, hello, rc;
+			var p, r, l, ev, hello, rc;
 
 			ev = new Javie.Events;
 			p  = new Javie.Profiler;
+			l  = new Javie.Logger;
 
 			p.timeEnd('load.page');
 			p.output();
 			
 			r = new Javie.Request('example');
 			ev.listen('Request.onComplete', function (data, status, self) {
-				console.log('completed from', self.get('name'), data);
+				l.log('completed from', self.get('name'), data);
 
 				// Run profiler trace.
 				p.trace();
@@ -79,6 +82,14 @@
 
 			rc = new Javie.Request('example');
 			rc.to('POST ' + document.location.href + 'modules/request/success.json').execute();
+		});
+
+		Javie('production', function () {
+			this.Logger.make().log('info', 'In production environment');
+		});
+
+		Javie('local', function () {
+			this.Logger.make().log('info', 'In local environment');
 		});
 		</script>
 	</body>

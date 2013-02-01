@@ -43,12 +43,12 @@ ev.fire('simon.say', ['hello world']);
 ev.fire('simon.say', ['good morning']);
 ev.fire('simon.say', ['goodbye']);
 
-// the .emit action above will create <p>hello world</p><p>good morning</p><p>goodbye</p>
+// the fire('simon.say') action above will create <p>hello world</p><p>good morning</p><p>goodbye</p>
 
 // to remove an action
 ev.forget(say);
 
-// now .emit('say') wouldn't do anything
+// now fire('simon.say') wouldn't do anything
 ev.fire('simon.say', ['does not output anything']);
 ```
 
@@ -57,8 +57,8 @@ In Javie, we use `Javie.Events` on top of `Javie.Request` to allow you to add at
 ```javascript
 var ev, p;
 
-ev = Event.make();
-p  = Profiler.make();
+ev = new Javie.Events;
+p  = new Javie.Profiler;
 
 ev.listen('Request.beforeSend', function (self) {
 	p.time(self.get('name') + '.request', 'Time taken for the request');

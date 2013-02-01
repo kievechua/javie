@@ -7,3 +7,6 @@
 [submodule "modules/logger"]
 	path = modules/logger
 	url = git@github.com:javie/logger.git
+[submodule "modules/request"]
+	path = modules/request
+	url = git@github.com:javie/request.git

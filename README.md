@@ -28,6 +28,47 @@ Javie(function initiateAllEnv () {
 });
 ```
 
+## Events
+
+`Javie.Events` is a publisher/subscriber object that you can use in your app, in a way it's similar to `jQuery.bind` and `jQuery.trigger` except that the event is not attach to any DOM element.
+
+```javascript
+var ev = new Javie.Events;
+
+var say = ev.listen('simon.say', function (say) {
+	jQuery('<p>').text(say).appendTo('body');
+});
+
+ev.fire('simon.say', ['hello world']);
+ev.fire('simon.say', ['good morning']);
+ev.fire('simon.say', ['goodbye']);
+
+// the .emit action above will create <p>hello world</p><p>good morning</p><p>goodbye</p>
+
+// to remove an action
+ev.forget(say);
+
+// now .emit('say') wouldn't do anything
+ev.fire('simon.say', ['does not output anything']);
+```
+
+In Javie, we use `Javie.Events` on top of `Javie.Request` to allow you to add attach event to any `Javie.Request` call. Let say you want to get the amount of time it took for each request.
+
+```javascript
+var ev, p;
+
+ev = Event.make();
+p  = Profiler.make();
+
+ev.listen('Request.beforeSend', function (self) {
+	p.time(self.get('name') + '.request', 'Time taken for the request');
+});
+
+ev.listen('Request.onComplete', function (data, status, self) {
+	p.timeEnd(self.get('name') + '.request');
+});
+```
+
 ## License
 
 	The MIT License

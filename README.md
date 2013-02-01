@@ -1,7 +1,28 @@
-javie
+Javie
 =====
 
-Javie Client-side JavaScript Library
+Javie Client-side JavaScript Library is simple toolkit written for Client-side JavaScript. The toolkit can be use separately and only requires file that is marked in the documentation. All the object use object combined with factory pattern to make a reusable global instance or multi-instance (depend which is better).
+
+## Javie
+
+`Javie` simplify the way you define your environment, for instance profiler and logger should only run in "dev" invironment.
+
+```javascript
+	Javie.ENV = "dev";
+
+	Javie('dev', function initiateDevEnv () {
+	    this.Profiler.enable();
+	    this.Logger.enable();
+	});
+
+	Javie('production', function initiateProdEnv () {
+	    // do something on just production environment.
+	});
+
+	Javie(function initiateAllEnv () {
+	    // this will be run in any environment.
+	});
+```
 
 ## License
 

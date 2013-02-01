@@ -69,6 +69,83 @@ ev.listen('Request.onComplete', function (data, status, self) {
 });
 ```
 
+## Profiler
+
+Profile your application the easy way, the functionality is wrapped around V8 or Firebug `console` and default to disabled unless required to run. This allow the code to sit nicely between DEVELOPMENT and PRODUCTION environment.
+
+```javascript
+// Enable the Profiler
+Javie.Profiler.enable();
+
+// Disable the Profiler
+Javie.Profiler.disable(); 
+```
+
+Let start with a simple profiling. 
+
+```javascript
+var p = new Javie.Profiler;
+
+// start a time log
+p.time('benchmark.a', 'Some description');
+
+for (var i = 100; i--; ) console.log(i);
+
+// marked an end time
+p.timeEnd('benchmark.a');
+
+/* 
+ * In addition you can also ignore start time and based the timestamp 
+ * to the first instance loaded time
+ */
+p.timeEnd('benchmark.b', 'Compared to Profiler.make()');
+```
+
+Trace function call up to now.
+
+```javascript
+p.trace();
+```
+
+To compile the output, use `Javie.Profiler::output()`
+
+```javascript
+p.output();
+```
+
+## Logger
+
+Log your application without any worries, the function is wrapped around V8 ir Firebug `console` and default to disabled unless required to run. This allow the code to sit nicely between DEVELOPMENT and PRODUCTION environment.
+
+```javascript
+// Enable the Logger
+Javie.Logger.enable();
+
+// Disable the Logger
+Javie.Logger.disable(); 
+```
+	
+Let start with logging.
+
+```javascript
+var logs = new Javie.Logger;
+
+// submit a error
+logs.error('It a error');
+
+// submit a warn
+logs.warn('It a warning');
+
+// submit a debug message
+logs.debug('It a debug');
+
+// submit a info
+logs.info('It a info');
+
+// submit a log
+logs.log('It a log');
+```
+
 ## Requirement
 
 * jQuery/Zepto

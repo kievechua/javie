@@ -62,6 +62,14 @@
 
 			p.timeEnd('load.page');
 			p.output();
+
+			ev.listen('Request.beforeSend', function (self) {
+			    p.time(self.get('name') + '.request', 'Time taken for the request');
+			});
+
+			ev.listen('Request.onComplete', function (data, status, self) {
+				p.timeEnd(self.get('name') + '.request');
+			});
 			
 			r = new Javie.Request('example');
 			ev.listen('Request.onComplete', function (data, status, self) {

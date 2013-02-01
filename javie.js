@@ -5,7 +5,7 @@
  *
  * @package     Javie
  * @require     underscore, console, jQuery/Zepto
- * @version     1.0.0       
+ * @version     1.0.1
  * @author      Mior Muhammad Zaki <http://git.io/crynobone>
  * @license     MIT License
  */
@@ -665,7 +665,7 @@
 	* @return {Profiler}
 	*/
 	Profiler.make = function make (name) {
-		var util, self, cache;
+		var self, cache;
 
 		if (console === undefined && this.enabled === true) {
 			throw new Error("console is not available.");
@@ -765,7 +765,7 @@
 					log       = schema();
 					log.start = this.startedAt;
 
-					if (util.isSet(message)) {
+					if ( ! _.isUndefined(message)) {
 						log.message = message;
 					}
 

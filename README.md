@@ -69,6 +69,12 @@ ev.listen('Request.onComplete', function (data, status, self) {
 });
 ```
 
+## Requirement
+
+* jQuery/Zepto
+* Underscore.js
+* Modern browser with `console` support.
+
 ## License
 
 	The MIT License

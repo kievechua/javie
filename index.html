@@ -1,0 +1,240 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <title>Javie by javie</title>
+
+    <link rel="stylesheet" href="stylesheets/styles.css">
+    <link rel="stylesheet" href="stylesheets/pygment_trac.css">
+    <script src="javascripts/scale.fix.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="wrapper">
+      <header>
+        <h1 class="header">Javie</h1>
+        <p class="header">Javie Client-side JavaScript Library</p>
+
+        <ul>
+          <li class="download"><a class="buttons" href="https://github.com/javie/javie/zipball/master">Download ZIP</a></li>
+          <li class="download"><a class="buttons" href="https://github.com/javie/javie/tarball/master">Download TAR</a></li>
+          <li><a class="buttons github" href="https://github.com/javie/javie">View On GitHub</a></li>
+        </ul>
+
+        <p class="header">This project is maintained by <a class="header name" href="https://github.com/javie">javie</a></p>
+
+
+      </header>
+      <section>
+        <h1>Javie</h1>
+
+<p>Javie Client-side JavaScript Library is simple toolkit written for Client-side JavaScript. The toolkit can be use separately and only requires file that is marked in the documentation. All the object use object combined with factory pattern to make a reusable global instance or multi-instance (depend which is better).</p>
+
+<h2>Javie</h2>
+
+<p><code>Javie</code> simplify the way you define your environment, for instance profiler and logger should only run in "dev" invironment.</p>
+
+<div class="highlight"><pre><span class="cm">/* Define the environment to `dev` */</span>
+<span class="nx">Javie</span><span class="p">.</span><span class="nx">ENV</span> <span class="o">=</span> <span class="s2">"dev"</span><span class="p">;</span>
+
+<span class="nx">Javie</span><span class="p">(</span><span class="s1">'dev'</span><span class="p">,</span> <span class="kd">function</span> <span class="nx">initiateDevEnv</span> <span class="p">()</span> <span class="p">{</span>
+    <span class="c1">// do something on just dev environment.</span>
+    <span class="k">this</span><span class="p">.</span><span class="nx">Profiler</span><span class="p">.</span><span class="nx">enable</span><span class="p">();</span>
+    <span class="k">this</span><span class="p">.</span><span class="nx">Logger</span><span class="p">.</span><span class="nx">enable</span><span class="p">();</span>
+<span class="p">});</span>
+
+<span class="nx">Javie</span><span class="p">(</span><span class="s1">'production'</span><span class="p">,</span> <span class="kd">function</span> <span class="nx">initiateProdEnv</span> <span class="p">()</span> <span class="p">{</span>
+    <span class="c1">// do something on just production environment.</span>
+    <span class="k">this</span><span class="p">.</span><span class="nx">Profiler</span><span class="p">.</span><span class="nx">disable</span><span class="p">();</span>
+    <span class="k">this</span><span class="p">.</span><span class="nx">Logger</span><span class="p">.</span><span class="nx">disable</span><span class="p">();</span>
+<span class="p">});</span>
+
+<span class="nx">Javie</span><span class="p">(</span><span class="kd">function</span> <span class="nx">initiateAllEnv</span> <span class="p">()</span> <span class="p">{</span>
+    <span class="c1">// this will be run in any environment.</span>
+<span class="p">});</span>
+</pre></div>
+
+<h2>Events</h2>
+
+<p><code>Javie.Events</code> is a publisher/subscriber object that you can use in your app, in a way it's similar to <code>jQuery.bind</code> and <code>jQuery.trigger</code> except that the event is not attach to any DOM element.</p>
+
+<div class="highlight"><pre><span class="kd">var</span> <span class="nx">ev</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Javie</span><span class="p">.</span><span class="nx">Events</span><span class="p">;</span>
+
+<span class="kd">var</span> <span class="nx">say</span> <span class="o">=</span> <span class="nx">ev</span><span class="p">.</span><span class="nx">listen</span><span class="p">(</span><span class="s1">'simon.say'</span><span class="p">,</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">say</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">jQuery</span><span class="p">(</span><span class="s1">'&lt;p&gt;'</span><span class="p">).</span><span class="nx">text</span><span class="p">(</span><span class="nx">say</span><span class="p">).</span><span class="nx">appendTo</span><span class="p">(</span><span class="s1">'body'</span><span class="p">);</span>
+<span class="p">});</span>
+
+<span class="nx">ev</span><span class="p">.</span><span class="nx">fire</span><span class="p">(</span><span class="s1">'simon.say'</span><span class="p">,</span> <span class="p">[</span><span class="s1">'hello world'</span><span class="p">]);</span>
+<span class="nx">ev</span><span class="p">.</span><span class="nx">fire</span><span class="p">(</span><span class="s1">'simon.say'</span><span class="p">,</span> <span class="p">[</span><span class="s1">'good morning'</span><span class="p">]);</span>
+<span class="nx">ev</span><span class="p">.</span><span class="nx">fire</span><span class="p">(</span><span class="s1">'simon.say'</span><span class="p">,</span> <span class="p">[</span><span class="s1">'goodbye'</span><span class="p">]);</span>
+
+<span class="c1">// the fire('simon.say') action above will create &lt;p&gt;hello world&lt;/p&gt;&lt;p&gt;good morning&lt;/p&gt;&lt;p&gt;goodbye&lt;/p&gt;</span>
+
+<span class="c1">// to remove an action</span>
+<span class="nx">ev</span><span class="p">.</span><span class="nx">forget</span><span class="p">(</span><span class="nx">say</span><span class="p">);</span>
+
+<span class="c1">// now fire('simon.say') wouldn't do anything</span>
+<span class="nx">ev</span><span class="p">.</span><span class="nx">fire</span><span class="p">(</span><span class="s1">'simon.say'</span><span class="p">,</span> <span class="p">[</span><span class="s1">'does not output anything'</span><span class="p">]);</span>
+</pre></div>
+
+<p>In Javie, we use <code>Javie.Events</code> on top of <code>Javie.Request</code> to allow you to add attach event to any <code>Javie.Request</code> call. Let say you want to get the amount of time it took for each request.</p>
+
+<div class="highlight"><pre><span class="kd">var</span> <span class="nx">ev</span><span class="p">,</span> <span class="nx">p</span><span class="p">;</span>
+
+<span class="nx">ev</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Javie</span><span class="p">.</span><span class="nx">Events</span><span class="p">;</span>
+<span class="nx">p</span>  <span class="o">=</span> <span class="k">new</span> <span class="nx">Javie</span><span class="p">.</span><span class="nx">Profiler</span><span class="p">;</span>
+
+<span class="nx">ev</span><span class="p">.</span><span class="nx">listen</span><span class="p">(</span><span class="s1">'Request.beforeSend'</span><span class="p">,</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">self</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">p</span><span class="p">.</span><span class="nx">time</span><span class="p">(</span><span class="nx">self</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s1">'name'</span><span class="p">)</span> <span class="o">+</span> <span class="s1">'.request'</span><span class="p">,</span> <span class="s1">'Time taken for the request'</span><span class="p">);</span>
+<span class="p">});</span>
+
+<span class="nx">ev</span><span class="p">.</span><span class="nx">listen</span><span class="p">(</span><span class="s1">'Request.onComplete'</span><span class="p">,</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">data</span><span class="p">,</span> <span class="nx">status</span><span class="p">,</span> <span class="nx">self</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">p</span><span class="p">.</span><span class="nx">timeEnd</span><span class="p">(</span><span class="nx">self</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s1">'name'</span><span class="p">)</span> <span class="o">+</span> <span class="s1">'.request'</span><span class="p">);</span>
+<span class="p">});</span>
+</pre></div>
+
+<h2>Profiler</h2>
+
+<p>Profile your application the easy way, the functionality is wrapped around V8 or Firebug <code>console</code> and default to disabled unless required to run. This allow the code to sit nicely between DEVELOPMENT and PRODUCTION environment.</p>
+
+<div class="highlight"><pre><span class="c1">// Enable the Profiler</span>
+<span class="nx">Javie</span><span class="p">.</span><span class="nx">Profiler</span><span class="p">.</span><span class="nx">enable</span><span class="p">();</span>
+
+<span class="c1">// Disable the Profiler</span>
+<span class="nx">Javie</span><span class="p">.</span><span class="nx">Profiler</span><span class="p">.</span><span class="nx">disable</span><span class="p">();</span> 
+</pre></div>
+
+<p>Let start with a simple profiling. </p>
+
+<div class="highlight"><pre><span class="kd">var</span> <span class="nx">p</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Javie</span><span class="p">.</span><span class="nx">Profiler</span><span class="p">;</span>
+
+<span class="c1">// start a time log</span>
+<span class="nx">p</span><span class="p">.</span><span class="nx">time</span><span class="p">(</span><span class="s1">'benchmark.a'</span><span class="p">,</span> <span class="s1">'Some description'</span><span class="p">);</span>
+
+<span class="k">for</span> <span class="p">(</span><span class="kd">var</span> <span class="nx">i</span> <span class="o">=</span> <span class="mi">100</span><span class="p">;</span> <span class="nx">i</span><span class="o">--</span><span class="p">;</span> <span class="p">)</span> <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">i</span><span class="p">);</span>
+
+<span class="c1">// marked an end time</span>
+<span class="nx">p</span><span class="p">.</span><span class="nx">timeEnd</span><span class="p">(</span><span class="s1">'benchmark.a'</span><span class="p">);</span>
+
+<span class="cm">/* </span>
+<span class="cm"> * In addition you can also ignore start time and based the timestamp </span>
+<span class="cm"> * to the first instance loaded time</span>
+<span class="cm"> */</span>
+<span class="nx">p</span><span class="p">.</span><span class="nx">timeEnd</span><span class="p">(</span><span class="s1">'benchmark.b'</span><span class="p">,</span> <span class="s1">'Compared to Profiler.make()'</span><span class="p">);</span>
+</pre></div>
+
+<p>Trace function call up to now.</p>
+
+<div class="highlight"><pre><span class="nx">p</span><span class="p">.</span><span class="nx">trace</span><span class="p">();</span>
+</pre></div>
+
+<p>To compile the output, use <code>Javie.Profiler::output()</code></p>
+
+<div class="highlight"><pre><span class="nx">p</span><span class="p">.</span><span class="nx">output</span><span class="p">();</span>
+</pre></div>
+
+<h2>Logger</h2>
+
+<p>Log your application without any worries, the function is wrapped around V8 ir Firebug <code>console</code> and default to disabled unless required to run. This allow the code to sit nicely between DEVELOPMENT and PRODUCTION environment.</p>
+
+<div class="highlight"><pre><span class="c1">// Enable the Logger</span>
+<span class="nx">Javie</span><span class="p">.</span><span class="nx">Logger</span><span class="p">.</span><span class="nx">enable</span><span class="p">();</span>
+
+<span class="c1">// Disable the Logger</span>
+<span class="nx">Javie</span><span class="p">.</span><span class="nx">Logger</span><span class="p">.</span><span class="nx">disable</span><span class="p">();</span> 
+</pre></div>
+
+<p>Let start with logging.</p>
+
+<div class="highlight"><pre><span class="kd">var</span> <span class="nx">logs</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Javie</span><span class="p">.</span><span class="nx">Logger</span><span class="p">;</span>
+
+<span class="c1">// submit a error</span>
+<span class="nx">logs</span><span class="p">.</span><span class="nx">error</span><span class="p">(</span><span class="s1">'It a error'</span><span class="p">);</span>
+
+<span class="c1">// submit a warn</span>
+<span class="nx">logs</span><span class="p">.</span><span class="nx">warn</span><span class="p">(</span><span class="s1">'It a warning'</span><span class="p">);</span>
+
+<span class="c1">// submit a debug message</span>
+<span class="nx">logs</span><span class="p">.</span><span class="nx">debug</span><span class="p">(</span><span class="s1">'It a debug'</span><span class="p">);</span>
+
+<span class="c1">// submit a info</span>
+<span class="nx">logs</span><span class="p">.</span><span class="nx">info</span><span class="p">(</span><span class="s1">'It a info'</span><span class="p">);</span>
+
+<span class="c1">// submit a log</span>
+<span class="nx">logs</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">'It a log'</span><span class="p">);</span>
+</pre></div>
+
+<h2>Request</h2>
+
+<p><code>Javie.Request</code> is a quick way to use RESTful request on top of <code>jQuery.ajax</code> or <code>Zepto.ajax</code>. You can choice whether to use <code>GET</code>, <code>POST</code>, <code>PUT</code> or <code>DELETE</code> and the object will manage everything else.</p>
+
+<div class="highlight"><pre><span class="nx">jQuery</span><span class="p">(</span><span class="s1">'#register-form'</span><span class="p">).</span><span class="nx">bind</span><span class="p">(</span><span class="s1">'submit'</span><span class="p">,</span> <span class="kd">function</span> <span class="nx">onRegisterFormSubmit</span> <span class="p">(</span><span class="nx">e</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kd">var</span> <span class="nx">r</span><span class="p">;</span>
+
+    <span class="nx">e</span><span class="p">.</span><span class="nx">preventDefault</span><span class="p">();</span>
+
+    <span class="nx">r</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Javie</span><span class="p">.</span><span class="nx">Request</span><span class="p">(</span><span class="s1">'register'</span><span class="p">);</span>
+    <span class="nx">r</span><span class="p">.</span><span class="nx">to</span><span class="p">(</span><span class="s1">'POST /register.php'</span><span class="p">,</span> <span class="k">this</span><span class="p">).</span><span class="nx">execute</span><span class="p">();</span>
+<span class="p">});</span>
+</pre></div>
+
+<p>Using <code>Javie.Events</code>, you can attach as many event as you wish to either global or individual name that you identify when you run <code>Javie.Request('register')</code> (in this case the name would be <code>register</code>).</p>
+
+<div class="highlight"><pre><span class="kd">var</span> <span class="nx">ev</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Javie</span><span class="p">.</span><span class="nx">Events</span><span class="p">;</span>
+
+<span class="nx">ev</span><span class="p">.</span><span class="nx">listen</span><span class="p">(</span><span class="s1">'Request.beforeSend: register'</span><span class="p">,</span> <span class="kd">function</span> <span class="nx">beforeSend</span> <span class="p">(</span><span class="nx">self</span><span class="p">)</span> <span class="p">{</span> 
+    <span class="c1">// this will be run before Ajax request is send to server.</span>
+<span class="p">});</span>
+
+<span class="nx">ev</span><span class="p">.</span><span class="nx">listen</span><span class="p">(</span><span class="s1">'Request.onError: register'</span><span class="p">,</span> <span class="kd">function</span> <span class="nx">onValidationError</span> <span class="p">(</span><span class="nx">data</span><span class="p">,</span> <span class="nx">status</span><span class="p">,</span> <span class="nx">self</span><span class="p">)</span> <span class="p">{</span> 
+    <span class="c1">// this will be run if server return json containing { 'errors' : [ ] }</span>
+<span class="p">});</span>
+
+<span class="nx">ev</span><span class="p">.</span><span class="nx">listen</span><span class="p">(</span><span class="s1">'Request.onComplete: register'</span><span class="p">,</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">data</span><span class="p">,</span> <span class="nx">status</span><span class="p">,</span> <span class="nx">self</span><span class="p">)</span> <span class="p">{</span> 
+    <span class="c1">// this will be run once the request is completed.</span>
+<span class="p">});</span>
+</pre></div>
+
+<h2>Requirement</h2>
+
+<ul>
+<li>jQuery/Zepto</li>
+<li>Underscore.js</li>
+<li>Modern browser with <code>console</code> support.</li>
+</ul><h2>License</h2>
+
+<pre><code>The MIT License
+
+Copyright (C) 2012 by Mior Muhammad Zaki &lt;http://git.io/crynobone&gt; 
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.
+</code></pre>
+      </section>
+      <footer>
+        <p><small>Hosted on <a href="https://pages.github.com">GitHub Pages</a> using the Dinky theme</small></p>
+      </footer>
+    </div>
+    <!--[if !IE]><script>fixScale(document);</script><![endif]-->
+		
+  </body>
+</html>

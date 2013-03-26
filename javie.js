@@ -5,7 +5,7 @@
  *
  * @package     Javie
  * @require     underscore, console, jQuery/Zepto
- * @version     1.0.1
+ * @version     1.0.0       
  * @author      Mior Muhammad Zaki <http://git.io/crynobone>
  * @license     MIT License
  */
@@ -28,6 +28,12 @@
 		throw new Error('Expected Underscore.js not available');
 	}
 
+	/**
+	 * Execute a set of command within specific environment, or all.
+	 * 	
+	 * @param {string}   env
+	 * @param {Function} callback
+	 */
 	Javie = function Javie (env, callback) {
 		if (_.isFunction(env)) {
 			callback = env;
@@ -39,9 +45,63 @@
 		}
 	};
 
+	/**
+	 * Configuration for Javie
+	 * 
+	 * @type {Object}
+	 */
+	Javie.config = {};
 
-	Javie.ENV  = 'production';
-	root.Javie = Javie;
+	/**
+	 * Update Javie configuration information.
+	 *
+	 * <code>
+	 * 		Javie.put('baseUrl', 'http://foobar.com');
+	 *
+	 * 		Javie.put({
+	 * 			'baseUrl': 'http://foobar.com',
+	 * 			'foo': 'foo is awesome'
+	 * 		});
+	 * </code>
+	 * 
+	 * @param  {mixed} key
+	 * @param  {mixed} value
+	 * @return {void}
+	 */
+	Javie.put = function put (key, value) {
+		var config = (!_.isString(key)) ? key : { key : value };
+
+		this.config = _.defaults(config, this.config);
+	};
+
+	/**
+	 * Get Javie configuration information.
+	 *
+	 * <code>
+	 * 		Javie.get('baseUrl', 'http://foobar.com');
+	 * </code>
+	 * 
+	 * @param  {mixed} key
+	 * @param  {mixed} _default
+	 * @return {void}
+	 */
+	Javie.get = function get (key, _default) {
+		if ( ! _.isUndefined(_default)) _default = null;
+
+		if ( ! _.isUndefined(this.config[key])) return _default;
+
+		return this.config[key];
+	};
+
+	/**
+	 * Javie Environment value.
+	 * 
+	 * @type {String}
+	 */
+	Javie.ENV    = 'production';
+
+	// Append Javie to global.
+	root.Javie   = Javie;
 
 }).call(this);
 
@@ -52,6 +112,7 @@
  * @package     Javie
  * @class       Event
  * @require     underscore
+ * @version     1.0.0
  * @since       0.1.0
  * @author      Mior Muhammad Zaki <https://git.io/crynobone>
  * @license     MIT License
@@ -318,7 +379,8 @@
  *
  * @package     Javie
  * @require     underscore, console
- * @since       0.1
+ * @version     1.0.0
+ * @since       0.1.0
  * @author      Mior Muhammad Zaki <https://github.com/crynobone>
  * @license     MIT License
  */
@@ -561,7 +623,8 @@
  *
  * @package     Javie
  * @require     underscore, console
- * @since       0.1
+ * @version     1.0.0
+ * @since       0.1.0
  * @author      Mior Muhammad Zaki <https://github.com/crynobone>
  * @license     MIT License
  */
@@ -854,6 +917,7 @@
  *
  * @package     Javie
  * @require     underscore, jQuery/Zepto
+ * @version     1.0.0
  * @since       0.1.1
  * @author      Mior Muhammad Zaki <http://git.io/crynobone>
  * @license     MIT License
@@ -941,6 +1005,25 @@
 		var config = (!_.isString(key)) ? key : { key : value };
 
 		this.config = _.defaults(config, this.config);
+	};
+
+	/**
+	 * Get Request configuration information.
+	 *
+	 * <code>
+	 * 		Request.get('baseUrl', 'http://foobar.com');
+	 * </code>
+	 * 
+	 * @param  {mixed} key
+	 * @param  {mixed} _default
+	 * @return {void}
+	 */
+	Request.get = function get (key, _default) {
+		if (_.isUndefined(_default)) _default = null;
+
+		if (_.isUndefined(this.config[key])) return _default;
+
+		return this.config[key];
 	};
 
 	/**
@@ -1044,6 +1127,8 @@
 						}
 					}
 
+					uri = uri.replace(':baseUrl', self.get('baseUrl', ''));
+
 					own.put({
 						'type': type,
 						'uri': uri
@@ -1091,7 +1176,7 @@
 							data   = parseJSON(xhr.responseText);
 							status = xhr.status;
 
-							if (data.hasOwnProperty('errors')) {
+							if ( ! _.isUndefined(data) && data.hasOwnProperty('errors')) {
 								ev.fire('Request.onError', [data.errors, status, own]);
 								ev.fire('Request.onError: '+name, [data.errors, status, own]);
 

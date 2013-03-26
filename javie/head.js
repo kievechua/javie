@@ -28,6 +28,12 @@
 		throw new Error('Expected Underscore.js not available');
 	}
 
+	/**
+	 * Execute a set of command within specific environment, or all.
+	 * 	
+	 * @param {string}   env
+	 * @param {Function} callback
+	 */
 	Javie = function Javie (env, callback) {
 		if (_.isFunction(env)) {
 			callback = env;
@@ -39,9 +45,63 @@
 		}
 	};
 
+	/**
+	 * Configuration for Javie
+	 * 
+	 * @type {Object}
+	 */
+	Javie.config = {};
 
-	Javie.ENV  = 'production';
-	root.Javie = Javie;
+	/**
+	 * Update Javie configuration information.
+	 *
+	 * <code>
+	 * 		Javie.put('baseUrl', 'http://foobar.com');
+	 *
+	 * 		Javie.put({
+	 * 			'baseUrl': 'http://foobar.com',
+	 * 			'foo': 'foo is awesome'
+	 * 		});
+	 * </code>
+	 * 
+	 * @param  {mixed} key
+	 * @param  {mixed} value
+	 * @return {void}
+	 */
+	Javie.put = function put (key, value) {
+		var config = (!_.isString(key)) ? key : { key : value };
+
+		this.config = _.defaults(config, this.config);
+	};
+
+	/**
+	 * Get Javie configuration information.
+	 *
+	 * <code>
+	 * 		Javie.get('baseUrl', 'http://foobar.com');
+	 * </code>
+	 * 
+	 * @param  {mixed} key
+	 * @param  {mixed} _default
+	 * @return {void}
+	 */
+	Javie.get = function get (key, _default) {
+		if ( ! _.isUndefined(_default)) _default = null;
+
+		if ( ! _.isUndefined(this.config[key])) return _default;
+
+		return this.config[key];
+	};
+
+	/**
+	 * Javie Environment value.
+	 * 
+	 * @type {String}
+	 */
+	Javie.ENV    = 'production';
+
+	// Append Javie to global.
+	root.Javie   = Javie;
 
 }).call(this);
 

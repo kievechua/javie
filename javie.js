@@ -1,11 +1,11 @@
 /**
  * ========================================================================
- * Javie version 1.0.0
+ * Javie version 1.0.3
  * ========================================================================
  *
  * @package     Javie
  * @require     underscore, console, jQuery/Zepto
- * @version     1.0.0       
+ * @version     1.0.3       
  * @author      Mior Muhammad Zaki <http://git.io/crynobone>
  * @license     MIT License
  */
@@ -69,7 +69,12 @@
 	 * @return {void}
 	 */
 	Javie.put = function put (key, value) {
-		var config = (!_.isString(key)) ? key : { key : value };
+		var config = key;
+
+		if ( ! _.isObject(config)) {
+			config = {};
+			config[key.toString()] = value;
+		}
 
 		this.config = _.defaults(config, this.config);
 	};
@@ -917,7 +922,7 @@
  *
  * @package     Javie
  * @require     underscore, jQuery/Zepto
- * @version     1.0.0
+ * @version     1.0.1
  * @since       0.1.1
  * @author      Mior Muhammad Zaki <http://git.io/crynobone>
  * @license     MIT License
@@ -1002,8 +1007,13 @@
 	 * @return {void}
 	 */
 	Request.put = function put(key, value) {
-		var config = (!_.isString(key)) ? key : { key : value };
+		var config = key;
 
+		if ( ! _.isObject(config)) {
+			config = {};
+			config[key.toString()] = value;
+		}
+		
 		this.config = _.defaults(config, this.config);
 	};
 

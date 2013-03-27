@@ -11,7 +11,7 @@
 		</foreach>
 		<phingcall target="compile-foot"></phingcall>
 
-		<exec command="uglifyjs -o javie.min.js javie.js" dir="./" checkreturn="true" logoutput="true" />
+		<exec command="java -jar ./bin/yuicompressor-2.4.7.jar --charset utf-8 --preserve-semi --line-break 150 -o javie.min.js javie.js" dir="./" checkreturn="true" logoutput="true" />
 	</target>
 
 	<target name="delete-archive">

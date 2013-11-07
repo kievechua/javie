@@ -28,12 +28,12 @@ Javie(function initiateAllEnv () {
 });
 ```
 
-## Events
+## Event Dispatcher
 
-`Javie.Events` is a publisher/subscriber object that you can use in your app, in a way it's similar to `jQuery.bind` and `jQuery.trigger` except that the event is not attach to any DOM element.
+`Javie.EventDispatcher` is a publisher/subscriber object that you can use in your app, in a way it's similar to `jQuery.bind` and `jQuery.trigger` except that the event is not attach to any DOM element.
 
 ```javascript
-var ev = new Javie.Events;
+var ev = new Javie.EventDispatcher;
 
 var say = ev.listen('simon.say', function (say) {
 	jQuery('<p>').text(say).appendTo('body');
@@ -52,12 +52,12 @@ ev.forget(say);
 ev.fire('simon.say', ['does not output anything']);
 ```
 
-In Javie, we use `Javie.Events` on top of `Javie.Request` to allow you to add attach event to any `Javie.Request` call. Let say you want to get the amount of time it took for each request.
+In Javie, we use `Javie.EventDispatcher` on top of `Javie.Request` to allow you to add attach event to any `Javie.Request` call. Let say you want to get the amount of time it took for each request.
 
 ```javascript
 var ev, p;
 
-ev = new Javie.Events;
+ev = new Javie.EventDispatcher;
 p  = new Javie.Profiler;
 
 ev.listen('Request.beforeSend', function (self) {
@@ -78,10 +78,10 @@ Profile your application the easy way, the functionality is wrapped around V8 or
 Javie.Profiler.enable();
 
 // Disable the Profiler
-Javie.Profiler.disable(); 
+Javie.Profiler.disable();
 ```
 
-Let start with a simple profiling. 
+Let start with a simple profiling.
 
 ```javascript
 var p = new Javie.Profiler;
@@ -94,8 +94,8 @@ for (var i = 100; i--; ) console.log(i);
 // marked an end time
 p.timeEnd('benchmark.a');
 
-/* 
- * In addition you can also ignore start time and based the timestamp 
+/*
+ * In addition you can also ignore start time and based the timestamp
  * to the first instance loaded time
  */
 p.timeEnd('benchmark.b', 'Compared to Profiler.make()');
@@ -122,9 +122,9 @@ Log your application without any worries, the function is wrapped around V8 ir F
 Javie.Logger.enable();
 
 // Disable the Logger
-Javie.Logger.disable(); 
+Javie.Logger.disable();
 ```
-	
+
 Let start with logging.
 
 ```javascript
@@ -153,28 +153,28 @@ logs.log('It a log');
 ```javascript
 jQuery('#register-form').bind('submit', function onRegisterFormSubmit (e) {
 	var r;
-	
+
 	e.preventDefault();
-	
+
 	r = new Javie.Request('register');
 	r.to('POST /register.php', this).execute();
 });
 ```
 
-Using `Javie.Events`, you can attach as many event as you wish to either global or individual name that you identify when you run `Javie.Request('register')` (in this case the name would be `register`).
+Using `Javie.EventDispatcher`, you can attach as many event as you wish to either global or individual name that you identify when you run `Javie.Request('register')` (in this case the name would be `register`).
 
 ```javascript
-var ev = new Javie.Events;
+var ev = new Javie.EventDispatcher;
 
-ev.listen('Request.beforeSend: register', function beforeSend (self) { 
+ev.listen('Request.beforeSend: register', function beforeSend (self) {
 	// this will be run before Ajax request is send to server.
 });
 
-ev.listen('Request.onError: register', function onValidationError (data, status, self) { 
+ev.listen('Request.onError: register', function onValidationError (data, status, self) {
 	// this will be run if server return json containing { 'errors' : [ ] }
 });
 
-ev.listen('Request.onComplete: register', function (data, status, self) { 
+ev.listen('Request.onComplete: register', function (data, status, self) {
 	// this will be run once the request is completed.
 });
 ```
@@ -189,7 +189,7 @@ ev.listen('Request.onComplete: register', function (data, status, self) {
 
 	The MIT License
 
-	Copyright (C) 2012 by Mior Muhammad Zaki <http://git.io/crynobone> 
+	Copyright (C) 2012 by Mior Muhammad Zaki <http://git.io/crynobone>
 
 	Permission is hereby granted, free of charge, to any person obtaining a copy
 	of this software and associated documentation files (the "Software"), to deal

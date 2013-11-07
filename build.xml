@@ -55,7 +55,4 @@
 			<fileset refid="file-to-compile" />
 		</append>
 	</target>
-
-
-
 </project>

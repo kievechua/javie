@@ -113,7 +113,7 @@
 /**
  * Client-side and Node.js Event Listener Helper
  * ==========================================================
- * 
+ *
  * @package     Javie
  * @class       Event
  * @require     underscore
@@ -123,28 +123,28 @@
  * @license     MIT License
  */
 
-(function () { 'use strict';
+(function() { 'use strict';
 
-	var root, Events, _, cache;
+	var root, EventDispatcher, _, cache;
 
 	// Save a reference to the global object (`window` in the browser, `global` on the server)
 	root = this;
 
-	// Create a safe reference to the Events object for use below.
-	Events = function () {
-		return Events.make();
+	// Create a safe reference to the Event Dispatcher object for use below.
+	EventDispatcher = function() {
+		return EventDispatcher.make();
 	};
 
 	// Export the object for **Node.js**, with
 	// backwards-compatibility for the old `require()` API. If we're in
-	// the browser, add `Events` as a global object via a string identifier,
-	// for Closure Compiler "advanced" mode.
+	// the browser, add `EventDispatcher` as a global object via a string
+	// identifier, for Closure Compiler "advanced" mode.
 	if ('undefined' !== typeof exports) {
 		if ('undefined' !== typeof module && module.exports) {
-			exports = module.exports = Events;
+			exports = module.exports = EventDispatcher;
 		}
 
-		exports.Events = Events;
+		exports.Events = exports.EventDispatcher = EventDispatcher;
 	}
 	else {
 		// Register Javie namespace if it's not available yet.
@@ -152,7 +152,7 @@
 			root.Javie = {};
 		}
 
-		root.Javie.Events = Events;
+		root.Javie.EventDispatcher = root.Javie.Events = EventDispatcher;
 	}
 
 	// load all dependencies
@@ -172,17 +172,17 @@
 	 * Make Event instance or return one from cache.
 	 *
 	 * <code>
-	 *     var ev = Javie.Events.make();
+	 *     var ev = Javie.EventDispatcher.make();
 	 * </code>
 	 *
 	 * @return {Object} Event
 	 */
-	Events.make = function make() {
+	EventDispatcher.make = function make() {
 		var events, self;
 
 		self = this;
 
-		// Once Events.make is called, we should read it from cache.
+		// Once EventDispatcher.make is called, we should read it from cache.
 		if (!_.isNull(cache) && !_.isUndefined(cache)) {
 			return cache;
 		}
@@ -194,7 +194,7 @@
 			 * Add an event listener
 			 *
 			 * <code>
-			 *     ev.listen('javie.ready', function () {
+			 *     ev.listen('javie.ready', function() {
 			 *         console.log('javie.ready');
 			 *     });
 			 * </code>
@@ -203,7 +203,7 @@
 			 * @param  {Function} cb
 			 * @return {Object}
 			 */
-			listen: function listen (id, cb) {
+			listen: function listen(id, cb) {
 				if (!_.isFunction(cb)) {
 					throw new Error('Callback is not a function');
 				}
@@ -221,7 +221,7 @@
 			 * Add an event listener
 			 *
 			 * <code>
-			 *     ev.listener('javie.ready', function () {
+			 *     ev.listener('javie.ready', function() {
 			 *         console.log('javie.ready');
 			 *     });
 			 * </code>
@@ -231,7 +231,7 @@
 			 * @param  {Function} cb
 			 * @return {Object}
 			 */
-			listener: function listener (id, cb) {
+			listener: function listener(id, cb) {
 				return this.listen(id, cb);
 			},
 
@@ -243,13 +243,13 @@
 			 * </code>
 			 *
 			 * @param  {String} id
-			 * @param  {Array} params
+			 * @param  {Array}  params
 			 * @return {Array}
 			 */
-			fire: function fire (id, params) {
+			fire: function fire(id, params) {
 				var me, response;
 
-				me       = this;
+				me = this;
 				response = [];
 
 				if (_.isNull(id)) {
@@ -260,7 +260,7 @@
 					return null;
 				}
 
-				_.each(events[id], function runEachEvent (callback, key) {
+				_.each(events[id], function runEachEvent(callback, key) {
 					response.push(callback.apply(me, params || []));
 				});
 
@@ -274,14 +274,14 @@
 			 *     ev.first('javie.ready');
 			 * </code>
 			 *
-			 * @param  {[type]} id     [description]
-			 * @param  {[type]} params [description]
-			 * @return {[type]}        [description]
+			 * @param  {String} id
+			 * @param  {Array}  params
+			 * @return {mixed}
 			 */
-			first: function first (id, params) {
+			first: function first(id, params) {
 				var me, response, first;
 
-				me       = this;
+				me = this;
 				response = [];
 
 				if (_.isNull(id)) {
@@ -294,7 +294,7 @@
 
 				first = events[id].slice(0, 1);
 
-				_.each(first, function runEachEvent (callback, key) {
+				_.each(first, function runEachEvent(callback, key) {
 					response.push(callback.apply(me, params || []));
 				});
 
@@ -315,7 +315,7 @@
 					return null;
 				}
 
-				_.each(events[id], function runEachEvent (callback, key) {
+				_.each(events[id], function runEachEvent(callback, key) {
 					if (_.isNull(response)) {
 						response = callback.apply(me, params || []);
 					}
@@ -324,13 +324,13 @@
 				return null;
 			},
 
-			flush: function flush (id) {
-				if ( ! _.isUndefined(events[id])) {
+			flush: function flush(id) {
+				if (!_.isUndefined(events[id])) {
 					events[id] = null;
 				}
 			},
 
-			forget: function forget (handler) {
+			forget: function forget(handler) {
 				var me, id, cb;
 
 				me = this;
@@ -349,7 +349,7 @@
 					throw new Error('No registered event found for [' + id + ']');
 				}
 
-				_.each(events[id], function loopEachEvent (callback, key) {
+				_.each(events[id], function loopEachEvent(callback, key) {
 					if (callback === cb) {
 						events[id].splice(key, 1);
 					}
@@ -359,13 +359,10 @@
 			/**
 			 * Clone original event to a new event.
 			 *
-			 * <code>
-			 *     $event = Javie.Ev
-			 * </code>
-			 * @param  {[type]} id [description]
-			 * @return {[type]}    [description]
+			 * @param  {String} id
+			 * @return {void}
 			 */
-			clone: function clone (id) {
+			clone: function clone(id) {
 				return {
 					to : function to (cloneTo) {
 						events[cloneTo] = _.clone(events[id]);
@@ -390,7 +387,7 @@
  * @license     MIT License
  */
 
-(function () { 'use strict';
+(function() { 'use strict';
 	var root, Logger, _, cache, console;
 
 	// Save a reference to global object (`window` in the browser, `global` on the server)
@@ -398,7 +395,7 @@
 	console = root.console;
 
 	// Create a safe reference to the Logger object for use below.
-	Logger = function () {
+	Logger = function() {
 		return Logger.make();
 	};
 
@@ -414,7 +411,7 @@
 		exports.Logger = Logger;
 	}
 	else {
-		// Register Javie namespace if it's not available yet. 
+		// Register Javie namespace if it's not available yet.
 		if ('undefined' === typeof root.Javie) {
 			root.Javie = {};
 		}
@@ -436,7 +433,7 @@
 	}
 
 	// turn arguments into array
-	function makeArray (args) {
+	function makeArray(args) {
 		return Array.prototype.slice.call(args);
 	}
 
@@ -461,21 +458,21 @@
 	Logger.LOG     = 'log';
 
 	// Enable Logger to run in this environment
-	Logger.enable = function enable () {
+	Logger.enable = function enable() {
 		this.enabled = true;
 	};
 
 	// Disable Logger to run in this environment
-	Logger.disable = function disable () {
+	Logger.disable = function disable() {
 		this.enabled = false;
 	};
 
 	// Get Logger enabled status
-	Logger.status = function status () {
+	Logger.status = function status() {
 		return this.enabled;
 	};
 
-	Logger.make = function make () {
+	Logger.make = function make() {
 		var self, post;
 
 		// return instance from cache
@@ -530,7 +527,7 @@
 			/**
 			* log marked as info
 			*/
-			info: function info () {
+			info: function info() {
 				var args;
 
 				args = makeArray(arguments);
@@ -545,7 +542,7 @@
 			/**
 			* log marked as debug
 			*/
-			debug: function debug () {
+			debug: function debug() {
 				var args;
 
 				args = makeArray(arguments);
@@ -560,7 +557,7 @@
 			/**
 			* log marked as error
 			*/
-			warning: function warning () {
+			warning: function warning() {
 				var args;
 
 				args = makeArray(arguments);
@@ -575,7 +572,7 @@
 			/**
 			* log marked as error
 			*/
-			error: function error () {
+			error: function error() {
 				var args;
 
 				args = makeArray(arguments);
@@ -590,7 +587,7 @@
 			/**
 			* log marked other than error, debug or info
 			*/
-			log: function log () {
+			log: function log() {
 				var args;
 
 				args = makeArray(arguments);
@@ -605,7 +602,7 @@
 			/**
 			* log marked other than error, debug or info (with log type as first parameter)
 			*/
-			post: function post () {
+			post: function post() {
 				var args;
 
 				args = makeArray(arguments);
@@ -621,7 +618,6 @@
 	};
 
 }).call(this);
-
 /**
  * Client-side and Node.js Profiler Helper
  * ==========================================================
@@ -634,8 +630,7 @@
  * @license     MIT License
  */
 
-(function (console) { 'use strict';
-
+(function(console) { 'use strict';
 	var root, Profiler, _, caches;
 
 	// Save a reference to the global object (`window` in the browser, `global` on the server)
@@ -645,7 +640,7 @@
 	caches = {};
 
 	// Create a safe reference to the Profiler object for use below.
-	Profiler = function (name) {
+	Profiler = function(name) {
 		return Profiler.make(name);
 	};
 
@@ -661,14 +656,14 @@
 		exports.Profiler = Profiler;
 	}
 	else {
-		// Register Javie namespace if it's not available yet. 
+		// Register Javie namespace if it's not available yet.
 		if ('undefined' === typeof root.Javie) {
 			root.Javie = {};
 		}
 
 		root.Javie.Profiler = Profiler;
 	}
-	
+
 	// load all dependencies
 	_ = root._;
 
@@ -700,7 +695,7 @@
 	 * @param  {Boolean}   asFloat
 	 * @return {mixed}
 	 */
-	function microtime (asFloat) {
+	function microtime(asFloat) {
 		var ms, sec;
 
 		ms  = new Date().getTime();
@@ -713,17 +708,17 @@
 	Profiler.enabled = false;
 
 	// Enable Profiler to run in this environment
-	Profiler.enable  = function enable () {
+	Profiler.enable  = function enable() {
 		this.enabled = true;
 	};
 
 	// Disable Profiler to run in this environment
-	Profiler.disable = function disable () {
+	Profiler.disable = function disable() {
 		this.enabled = false;
 	};
 
 	// Get Profiler enabled status
-	Profiler.status = function status () {
+	Profiler.status = function status() {
 		return this.enabled;
 	};
 
@@ -732,7 +727,7 @@
 	*
 	* @return {Profiler}
 	*/
-	Profiler.make = function make (name) {
+	Profiler.make = function make(name) {
 		var self, cache;
 
 		if (console === undefined && this.enabled === true) {
@@ -755,33 +750,33 @@
 		cache = {
 			/**
 			 * List of logs
-			 * 
+			 *
 			 * @type {Array}
 			 */
 			logs: [],
 
 			/**
 			 * list of pair id to key
-			 * 
+			 *
 			 * @type {Object}
 			 */
 			pair: {},
 
 			/**
 			 * mark initial starting microtime
-			 * 
+			 *
 			 * @type {[type]}
 			 */
 			startedAt: microtime(true),
 
 			/**
 			 * Mark start time and return the given ID
-			 * 
-			 * @param  {String}     id
-			 * @param  {String}     message
+			 *
+			 * @param  {String} id
+			 * @param  {String} message
 			 * @return {String}
 			 */
-			time: function start (id, message) {
+			time: function start(id, message) {
 				var key, log;
 
 				if (_.isNull(id)) {
@@ -792,14 +787,15 @@
 					return null;
 				}
 
-				log         = schema();
+				log = schema();
+
 				log.id      = id;
 				log.type    = 'time';
 				log.message = message.toString();
 				log.start   = microtime(true);
 
 				if (!_.isUndefined(this.pair['time.' + id])) {
-					key            = this.pair['time.' + id];
+					key = this.pair['time.' + id];
 					this.logs[key] = log;
 				} else {
 					this.logs.push(log);
@@ -818,7 +814,7 @@
 			 * @param  {mixed}
 			 * @return {Float}
 			 */
-			timeEnd: function mark (id, message) {
+			timeEnd: function mark(id, message) {
 				var key, start, end, total, log;
 
 				if (_.isNull(id)) {
@@ -852,7 +848,7 @@
 				start = log.start;
 				total = (end - start);
 
-				log.total      = total;
+				log.total = total;
 				this.logs[key] = log;
 
 				return total;
@@ -860,10 +856,10 @@
 
 			/**
 			 * Run console.trace()
-			 * 
+			 *
 			 * @return {void}
 			 */
-			trace: function trace () {
+			trace: function trace() {
 				if (self.enabled === false) {
 					return;
 				}
@@ -879,11 +875,11 @@
 			 *    p.mark('page.load', 'Load page');
 			 *    p.output();
 			 * </code>
-			 * 
+			 *
 			 * @param  {Boolean}
 			 * @return {void}
 			 */
-			output: function output (autoEnabled) {
+			output: function output(autoEnabled) {
 				var logs, index, length, current;
 
 				if (self.enabled === false) {
@@ -915,7 +911,6 @@
 	};
 
 }).call(this, console);
-
 /**
  * Client-side Request Helper
  * ==========================================================
@@ -928,18 +923,17 @@
  * @license     MIT License
  */
 
-(function () { 'use strict'; 
-
-	var root, Request, _, api, ev, storage;
+(function() { 'use strict';
+	var root, Request, _, api, dispatcher, storage;
 
 	// Save a reference to the global object (`window` in the browser, `global` on the server)
 	root = this;
 
 	// Create a safe reference to Request object to be used below.
-	Request = function (name) {
+	Request = function(name) {
 		return Request.make(name);
 	};
-	
+
 	storage = {};
 
 	// At this point, we don't have a request wrapper for Node.js implementation. So it would be
@@ -949,22 +943,24 @@
 	}
 
 	if ('undefined' === typeof root.Javie) {
-		throw new Error("Javie is required before using Javie.Request");
+		throw new Error("Javie is missing");
 	}
 
 	root.Javie.Request = Request;
 
-	if ('undefined' === typeof root.Javie.Events) {
-		throw new Error("Javie is missing Logger and Events");
+	if ('undefined' === typeof root.Javie.EventDispatcher) {
+		throw new Error("Javie.EventDispatcher is missing");
 	}
 
 	// Load all the dependencies
-	ev  = root.Javie.Events.make();
-	_   = root._;
+	dispatcher = root.Javie.EventDispatcher.make();
+	_ = root._;
 
-	if (!_ && 'undefined' !== typeof require) _ = require('underscore');
-	
-	// Map jQuery or Zepto instance, but I'm not really into this dollar sign stuff since in 
+	if (!_ && 'undefined' !== typeof require) {
+		_ = require('underscore');
+	}
+
+	// Map jQuery or Zepto instance, but I'm not really into this dollar sign stuff since in
 	// this scope we are focusing on the `ajax` method available from these libraries.
 	api = root.$;
 
@@ -973,14 +969,16 @@
 	}
 
 	function parseJSON(data) {
-		if (_.isString(data)) data = api.parseJSON(data);
+		if (_.isString(data)) {
+			data = api.parseJSON(data);
+		}
 
 		return data;
 	};
 
 	/**
 	 * Request configuration.
-	 * 
+	 *
 	 * @type {Object}
 	 */
 	Request.config = {
@@ -1001,7 +999,7 @@
 	 * 			'onError' : function (data, status) { // do something awesome }
 	 * 		});
 	 * </code>
-	 * 
+	 *
 	 * @param  {mixed} key
 	 * @param  {mixed} value
 	 * @return {void}
@@ -1009,11 +1007,11 @@
 	Request.put = function put(key, value) {
 		var config = key;
 
-		if ( ! _.isObject(config)) {
+		if (!_.isObject(config)) {
 			config = {};
 			config[key.toString()] = value;
 		}
-		
+
 		this.config = _.defaults(config, this.config);
 	};
 
@@ -1023,15 +1021,19 @@
 	 * <code>
 	 * 		Request.get('baseUrl', 'http://foobar.com');
 	 * </code>
-	 * 
+	 *
 	 * @param  {mixed} key
 	 * @param  {mixed} _default
 	 * @return {void}
 	 */
-	Request.get = function get (key, _default) {
-		if (_.isUndefined(_default)) _default = null;
+	Request.get = function get(key, _default) {
+		if (_.isUndefined(_default)) {
+			_default = null;
+		}
 
-		if (_.isUndefined(this.config[key])) return _default;
+		if (_.isUndefined(this.config[key])) {
+			return _default;
+		}
 
 		return this.config[key];
 	};
@@ -1042,14 +1044,14 @@
 	 * <code>
 	 * 		var r = Javie.Request.make('foo');
 	 * </code>
-	 * 
+	 *
 	 * @param  {string} name
 	 * @return {void}
 	 */
 	Request.make = function make(name) {
 		var cache, child, childName, parent, self;
 
-		if (!_.isString(name)) name = 'default';
+		if ( ! _.isString(name)) name = 'default';
 
 		self = this;
 
@@ -1064,9 +1066,9 @@
 				child     = self.make(childName);
 
 				// Replicate all parent configuration to child.
-				ev.clone('Request.onError: '+name).to('Request.onError: '+childName);
-				ev.clone('Request.onComplete: '+name).to('Request.onComplete: '+childName);
-				ev.clone('Request.beforeSend: '+name).to('Request.beforeSend: '+childName);
+				dispatcher.clone('Request.onError: '+name).to('Request.onError: '+childName);
+				dispatcher.clone('Request.onComplete: '+name).to('Request.onComplete: '+childName);
+				dispatcher.clone('Request.beforeSend: '+name).to('Request.beforeSend: '+childName);
 
 				child.put(parent.config);
 
@@ -1079,24 +1081,24 @@
 		cache = {
 			/**
 			 * Execution status.
-			 * 
+			 *
 			 * @type {Boolean}
 			 */
 			executed: false,
-			
+
 			/**
 			 * Create a request wrapper for a form.
 			 *
 			 * <code>
 			 * 		r.to('GET http://google.com?q=foobar', document.getElementById('foo'), 'JSON');
 			 * </code>
-			 * 
+			 *
 			 * @param  {string}      url
 			 * @param  {DOMDocument} object
 			 * @param  {string}      dataType e.g: JSON, XML etc.
 			 * @return {self}
 			 */
-			to: function to (url, object, dataType) {
+			to: function to(url, object, dataType) {
 				var own, r, type, uri, tmp;
 
 				own = this;
@@ -1115,7 +1117,7 @@
 					'type': 'GET',
 					'query': '',
 					'data': '',
-					'dataType': (!_.isUndefined(dataType) ? dataType : 'json'),
+					'dataType': ( ! _.isUndefined(dataType) ? dataType : 'json'),
 					'id': '',
 					'object': object
 				});
@@ -1130,7 +1132,7 @@
 
 					if (type !== 'GET') {
 						tmp = uri.split('?');
-						
+
 						if (tmp.length > 1) {
 							uri = tmp[0];
 							own.put('query', tmp[1]);
@@ -1157,10 +1159,10 @@
 			 * <code>
 			 * 		r.execute();
 			 * </code>
-			 * 
+			 *
 			 * @return {void}
 			 */
-			execute: function execute () {
+			execute: function execute() {
 				var own, data;
 
 				own  = this;
@@ -1170,8 +1172,8 @@
 
 				own.executed = true;
 
-				ev.fire('Request.beforeSend', [own]);
-				ev.fire('Request.beforeSend: '+name, [own]);
+				dispatcher.fire('Request.beforeSend', [own]);
+				dispatcher.fire('Request.beforeSend: '+name, [own]);
 				own.config.beforeSend(own);
 
 				api.ajax({
@@ -1186,17 +1188,17 @@
 							data   = parseJSON(xhr.responseText);
 							status = xhr.status;
 
-							if ( ! _.isUndefined(data) && data.hasOwnProperty('errors')) {
-								ev.fire('Request.onError', [data.errors, status, own]);
-								ev.fire('Request.onError: '+name, [data.errors, status, own]);
+							if (! _.isUndefined(data) && data.hasOwnProperty('errors')) {
+								dispatcher.fire('Request.onError', [data.errors, status, own]);
+								dispatcher.fire('Request.onError: '+name, [data.errors, status, own]);
 
 								own.config['onError'](data.errors, status, own);
 
 								data.errors = null;
 							}
 
-							ev.fire('Request.onComplete', [data, status, own]);
-							ev.fire('Request.onComplete: '+name, [data, status, own]);
+							dispatcher.fire('Request.onComplete', [data, status, own]);
+							dispatcher.fire('Request.onComplete: '+name, [data, status, own]);
 
 							own.config.onComplete(data, status, own);
 						}
@@ -1222,27 +1224,27 @@
 
 			/**
 			 * Update or overwrite a configuration.
-			 * 
+			 *
 			 * @param  {mixed} key
 			 * @param  {mixed} value
 			 * @return {void}
 			 */
-			put: function put (key, value) {
+			put: function put(key, value) {
 				var config = (!_.isString(key) ? key : { key : value });
 				this.config = _.defaults(config, this.config);
 			},
 
 			/**
 			 * Get a configuration value.
-			 * 
+			 *
 			 * @param  {string} key
 			 * @param  {mixed}  defaults
 			 * @return {mixed}
 			 */
-			get: function get (key, defaults) {
+			get: function get(key, defaults) {
 				if (_.isUndefined(defaults)) defaults = null;
 
-				return (!_.isUndefined(this.config[key]) ? this.config[key] : defaults);
+				return (! _.isUndefined(this.config[key]) ? this.config[key] : defaults);
 			}
 		};
 

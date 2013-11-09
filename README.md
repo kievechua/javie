@@ -148,7 +148,7 @@ logs.log('It a log');
 
 ## Request
 
-`Javie.Request` is a quick way to use RESTful request on top of `jQuery.ajax` or `Zepto.ajax`. You can choice whether to use `GET`, `POST`, `PUT` or `DELETE` and the object will manage everything else.
+`Javie.Request` is a quick way to use RESTful request on top of `jQuery.ajax` or `Zepto.ajax`. You can choose whether to use `GET`, `POST`, `PUT` or `DELETE` and the object will manage everything else.
 
 ```javascript
 jQuery('#register-form').bind('submit', function onRegisterFormSubmit (e) {
